@@ -1,0 +1,67 @@
+# Tabular Editor CLI — PR Validation (Windows)
+#
+# One of three single-OS PR-validation workflows (linux / windows / macos), kept as
+# SEPARATE workflows on purpose so each gets its own run + duration in the Actions tab
+# for easy timing/benchmark comparison across build agents.
+#
+# Runs the Best Practice Analyzer against the "bad" model on every PR to main.
+# Local-file BPA needs no auth — runs offline against the TMDL folder.
+# Fails the PR check on any BPA rule of severity Error.
+#
+# te binary committed gzip'd under tools/te/windows/ (see build-release.yml header) and
+# unpacked at runtime.
+
+name: PR Validation (Windows)
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash                      # Git Bash on the Windows runner; gunzip available
+
+env:
+  MODEL_PATH: SpacePartsBad.SemanticModel
+  TE_ARCHIVE: ./tools/te/windows/te.exe.gz
+  TE_BINARY: ./tools/te/windows/te.exe
+
+jobs:
+  bpa:
+    name: Run BPA (windows-latest)
+    runs-on: windows-latest
+    if: github.event.pull_request.draft == false   # skip drafts; remove to validate drafts too
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Unpack te binary
+        run: |
+          set -euo pipefail
+          gunzip -c "$TE_ARCHIVE" > "$TE_BINARY"
+          chmod +x "$TE_BINARY"
+          "$TE_BINARY" --version
+
+      - name: Run BPA
+        # No --auth env: bpa run against a local TMDL folder does not connect to a workspace.
+        # --ci github emits annotations; violations surface inline on the PR.
+        run: |
+          set -euo pipefail
+          "$TE_BINARY" bpa run "$MODEL_PATH" \
+            --fail-on error \
+            --ci github \
+            --trx bpa-results.trx \
+            --non-interactive
+
+      - name: Upload BPA artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bpa-results-windows
+          path: bpa-results.trx
+          if-no-files-found: ignore
