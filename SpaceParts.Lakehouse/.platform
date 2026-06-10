@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "SpaceParts",
+    "description": "Lakehouse storing the SpaceParts dataset - a free dataset provided by Tabular Editor that you can use to learn or practice."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "366ebde3-9b65-974b-4b0e-52735ba0d82d"
+  }
+}

@@ -1,0 +1,180 @@
+# Tabular Editor CLI — Build & Release (GitHub Actions)
+#
+# Runs the full release flow on THREE build agents (Linux, Windows, macOS) so you
+# can compare te CLI performance across runners. Each OS leg does:
+#   deploy_test:  deploy SpaceParts.SemanticModel to "TE CLI [tst]" -> refresh -> run .te-tests/
+#   deploy_prod:  (after every test leg passes) deploy the same model to "TE CLI [prd]"
+#
+# Binaries are committed gzip'd per-OS under tools/te/ (kept under GitHub's 100 MiB
+# file limit, no Git LFS needed) and unpacked at runtime by the "Unpack te binary" step:
+#   tools/te/linux/te.gz        (Linux x64 ELF)
+#   tools/te/windows/te.exe.gz  (Windows x64)
+#   tools/te/macos/te.gz        (macOS — macos-latest is Apple Silicon/arm64; use the arm64
+#                                build, or switch that matrix leg to macos-13 for Intel x64)
+#
+# Service principal credentials come from repository (or environment) secrets:
+#   AZURE_CLIENT_ID / AZURE_CLIENT_SECRET / AZURE_TENANT_ID
+# Add them in Settings -> Secrets and variables -> Actions (or scope to each environment).
+# Grant the SPN Contributor on both Fabric workspaces and enable the XMLA endpoint.
+#
+# Why max-parallel: 1 on the deploy matrix? All three legs target the SAME dataset in the
+# SAME workspace — running them at once would clash. Sequential legs still record an
+# independent wall-clock duration per OS, which is all the perf comparison needs.
+
+name: Build & Release
+
+on:
+  push:
+    branches:
+      - "releases/release*"          # only run on release branches (e.g. releases/release-1.0)
+  workflow_dispatch:                 # allow manual runs from the Actions tab
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash                      # bash is present on all three runners (Git Bash on Windows)
+
+env:
+  MODEL_PATH: SpaceParts.SemanticModel
+  DATASET_NAME: SpaceParts          # the database/semantic model name on the workspace
+  TEST_WORKSPACE: "TE CLI [tst]"    # spaces/brackets OK — quoted at the CLI call sites
+  PROD_WORKSPACE: "TE CLI [prd]"
+
+jobs:
+  ######################################################################
+  deploy_test:
+    name: "[tst] deploy + test (${{ matrix.os }})"
+    runs-on: ${{ matrix.os }}
+    environment: Test
+    strategy:
+      fail-fast: false               # one OS failing must not cancel the others
+      max-parallel: 1                # serialize: legs share one dataset/workspace
+      matrix:
+        include:
+          - os: ubuntu-latest
+            archive: ./tools/te/linux/te.gz
+            te: ./tools/te/linux/te
+          - os: windows-latest
+            archive: ./tools/te/windows/te.exe.gz
+            te: ./tools/te/windows/te.exe
+          - os: macos-latest
+            archive: ./tools/te/macos/te.gz
+            te: ./tools/te/macos/te
+    env:
+      TE_ARCHIVE: ${{ matrix.archive }}
+      TE_BINARY: ${{ matrix.te }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Unpack te binary
+        # Binaries are committed gzip'd to stay under GitHub's 100 MiB file limit.
+        # gunzip ships on all three runners (Git Bash on Windows).
+        run: |
+          set -euo pipefail
+          gunzip -c "$TE_ARCHIVE" > "$TE_BINARY"
+          chmod +x "$TE_BINARY"
+          "$TE_BINARY" --version
+
+      - name: Deploy to [tst]
+        run: |
+          set -euo pipefail
+          "$TE_BINARY" deploy "$MODEL_PATH" \
+            -s "$TEST_WORKSPACE" \
+            -d "$DATASET_NAME" \
+            --auth env \
+            --force \
+            --ci github \
+            --non-interactive
+
+      - name: Refresh model on [tst]
+        # --type calculate recomputes calculated columns/tables/measures against
+        # already-loaded data — seconds vs minutes for a --type full data reload.
+        # Demo-friendly. Swap back to --type full for production use.
+        run: |
+          set -euo pipefail
+          "$TE_BINARY" refresh \
+            -s "$TEST_WORKSPACE" \
+            -d "$DATASET_NAME" \
+            --auth env \
+            --table Brands \
+            --type full \
+            --no-progress \
+            --non-interactive
+
+      - name: Run test suite
+        # Uses the default suite location (./.te-tests/) — no --suite needed.
+        # --ci github emits annotations; failures surface inline on the run.
+        run: |
+          set -euo pipefail
+          "$TE_BINARY" test run \
+            -s "$TEST_WORKSPACE" \
+            -d "$DATASET_NAME" \
+            --auth env \
+            --fail-on error \
+            --ci github \
+            --trx test-results.trx \
+            --non-interactive
+
+      - name: Upload TRX artifact
+        uses: actions/upload-artifact@v4   # first-party GitHub action
+        if: always()                       # keep results even when tests fail
+        with:
+          name: test-results-${{ matrix.os }}
+          path: test-results.trx
+          if-no-files-found: ignore
+
+  ######################################################################
+  deploy_prod:
+    name: "[prd] deploy (${{ matrix.os }})"
+    needs: deploy_test               # waits for ALL test legs to pass
+    runs-on: ${{ matrix.os }}
+    environment: Production          # configure required reviewers here for the manual approval gate
+    strategy:
+      fail-fast: false
+      max-parallel: 1                # serialize: legs share one dataset/workspace
+      matrix:
+        include:
+          - os: ubuntu-latest
+            archive: ./tools/te/linux/te.gz
+            te: ./tools/te/linux/te
+          - os: windows-latest
+            archive: ./tools/te/windows/te.exe.gz
+            te: ./tools/te/windows/te.exe
+          - os: macos-latest
+            archive: ./tools/te/macos/te.gz
+            te: ./tools/te/macos/te
+    env:
+      TE_ARCHIVE: ${{ matrix.archive }}
+      TE_BINARY: ${{ matrix.te }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Unpack te binary
+        # Binaries are committed gzip'd to stay under GitHub's 100 MiB file limit.
+        # gunzip ships on all three runners (Git Bash on Windows).
+        run: |
+          set -euo pipefail
+          gunzip -c "$TE_ARCHIVE" > "$TE_BINARY"
+          chmod +x "$TE_BINARY"
+          "$TE_BINARY" --version
+
+      - name: Deploy to [prd]
+        run: |
+          set -euo pipefail
+          "$TE_BINARY" deploy "$MODEL_PATH" \
+            -s "$PROD_WORKSPACE" \
+            -d "$DATASET_NAME" \
+            --auth env \
+            --force \
+            --ci github \
+            --non-interactive

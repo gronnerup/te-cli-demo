@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "te test suite",
+  "description": "Test suite file for te CLI semantic model regression testing",
+  "type": "object",
+  "properties": {
+    "suite": {
+      "type": "string",
+      "description": "Suite name (displayed in output)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional suite description"
+    },
+    "connection": {
+      "type": "object",
+      "description": "Optional connection override for this suite",
+      "properties": {
+        "server": {
+          "type": "string",
+          "description": "Workspace name or XMLA endpoint"
+        },
+        "database": {
+          "type": "string",
+          "description": "Semantic model name"
+        },
+        "auth": {
+          "type": "string",
+          "description": "Auth method (auto, interactive, env, ...)"
+        }
+      }
+    },
+    "defaults": {
+      "type": "object",
+      "description": "Default values applied to all tests in this file",
+      "properties": {
+        "tolerance": {
+          "type": "number",
+          "description": "Default relative tolerance (0.01 = 1%)"
+        },
+        "tolerance_abs": {
+          "type": "number",
+          "description": "Default absolute tolerance"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Default tags applied to all tests"
+        }
+      }
+    },
+    "tests": {
+      "type": "array",
+      "description": "List of test cases",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "expect"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Test name (unique within suite)"
+          },
+          "query": {
+            "type": "string",
+            "description": "Inline DAX query (multiline with |)"
+          },
+          "query_file": {
+            "type": "string",
+            "description": "Path to .dax file (relative to suite dir)"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tolerance": {
+            "type": "number",
+            "description": "Relative tolerance override (0.01 = 1%)"
+          },
+          "tolerance_abs": {
+            "type": "number",
+            "description": "Absolute tolerance override"
+          },
+          "matrix": {
+            "type": "object",
+            "description": "Parameterised expansion: {var} placeholders replaced with each value",
+            "additionalProperties": {
+              "type": "array",
+              "items": {}
+            }
+          },
+          "expect": {
+            "type": "object",
+            "description": "Assertions. Special keys: rows, empty, columns, error. Other keys are column value assertions.",
+            "properties": {
+              "rows": {
+                "description": "Row count: int for exact, {gte: N, lte: N} for range"
+              },
+              "empty": {
+                "type": "boolean",
+                "description": "true = 0 rows, false = >= 1 row"
+              },
+              "columns": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Required column names"
+              },
+              "error": {
+                "type": "boolean",
+                "description": "true = query should error"
+              }
+            },
+            "additionalProperties": true
+          },
+          "compare": {
+            "type": "object",
+            "description": "Multi-row diff settings for te test compare",
+            "properties": {
+              "key": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Join columns for row matching"
+              },
+              "tolerance": {
+                "type": "number",
+                "description": "Tolerance for this comparison"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

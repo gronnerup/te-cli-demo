@@ -1,0 +1,6 @@
+# Uncompressed te CLI binaries — committed as .gz and unpacked at runtime
+# (see .github/workflows/*.yml). Keeps every file under GitHub's 100 MiB limit
+# without Git LFS.
+tools/te/linux/te
+tools/te/windows/te.exe
+tools/te/macos/te

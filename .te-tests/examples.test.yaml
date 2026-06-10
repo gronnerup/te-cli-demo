@@ -1,0 +1,48 @@
+# yaml-language-server: $schema=.te-tests/schema.json
+#
+# Test file reference -- every assertion type with explanations.
+# Delete this file or rename it once you've written your own tests.
+# Docs: te test spec
+
+suite: Example Tests
+description: Reference file showing all assertion types
+
+# Optional: override the CLI connection for this file
+# connection:
+#   server: my-workspace
+#   database: my-model
+
+# Optional: defaults applied to all tests in this file
+defaults:
+  tolerance: 0.01          # 1% relative tolerance
+
+tests:
+
+  # -- Exact value match --
+  # The simplest assertion: query returns a single value, check it exactly.
+  # Use ROW("col", <expression>) to produce a single-row, single-column result.
+  - name: Customer Count
+    query: |
+      EVALUATE ROW("value", COUNTROWS('Customers'))
+    expect:
+      value: 3911
+
+  # -- Row count --
+  # Check the number of rows returned.
+  - name: Exactly 6 Region Systems
+    query: |
+      EVALUATE VALUES('Regions'[System])
+    expect:
+      rows: 6
+
+  - name: At least 1 product type
+    query: |
+      EVALUATE VALUES('Products'[Type])
+    expect:
+      rows: { gte: 1 }
+
+  - name: Orders table has data
+    query: |
+      EVALUATE TOPN(1, 'Orders')
+    expect:
+      empty: false

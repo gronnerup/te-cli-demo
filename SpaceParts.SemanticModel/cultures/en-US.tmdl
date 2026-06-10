@@ -1,0 +1,397 @@
+cultureInfo en-US
+	translations
+		model SpaceParts
+			table Brands
+				column Flagship
+					displayFolder: 1. Brand Hierarchy
+				column Class
+					displayFolder: 1. Brand Hierarchy
+				column Type
+					displayFolder: 2. Brand Attributes
+				column Brand
+					displayFolder: 1. Brand Hierarchy
+				column 'Sub Brand'
+					displayFolder: 1. Brand Hierarchy
+				column 'Product Brand VP'
+					displayFolder: 3. Managers
+				hierarchy 'Brand Hierarchy'
+					displayFolder: 1. Brand Hierarchy
+			table Customers
+				column 'Customer Sold-To Name'
+					displayFolder: 1. Customer Hierarchy
+				column 'Account Name'
+					displayFolder: 1. Customer Hierarchy
+				column 'Key Account Name'
+					displayFolder: 1. Customer Hierarchy
+				column 'Transaction Type'
+					displayFolder: 2. Other Customer Attributes
+				column 'Account Type'
+					displayFolder: 1. Customer Hierarchy
+				column 'Account Manager'
+					displayFolder: 3. Managers
+				column 'Key Account Manager'
+					displayFolder: 3. Managers
+				measure '# Customers'
+					displayFolder: Measures
+				measure '# Key Accounts'
+					displayFolder: Measures
+				hierarchy 'Customer Hierarchy'
+					displayFolder: 1. Customer Hierarchy
+			table 'Exchange Rate'
+				column 'From Currency'
+					displayFolder: 1. Select a Currency
+			table 'Invoice Document Type'
+				column 'Billing Document Type Code'
+					displayFolder: 2. Keys
+				column Text
+					displayFolder: 1. Billing Doc. Type
+				column Group
+					displayFolder: 1. Billing Doc. Type
+			table Products
+				column 'Ship Class for Part'
+					displayFolder: 2. Product Attributes
+				column 'Product Name'
+					displayFolder: 1. Product Hierarchy
+				column 'Part Fit Grading'
+					displayFolder: 2. Product Attributes
+				column Subtype
+					displayFolder: 1. Product Hierarchy
+				column Type
+					displayFolder: 1. Product Hierarchy
+				column MK
+					displayFolder: 2. Product Attributes
+				column Color
+					displayFolder: 2. Product Attributes
+				column 'Production Series'
+					displayFolder: 2. Product Attributes
+				column Nameplate
+					displayFolder: 2. Product Attributes
+				column Material
+					displayFolder: 1. Product Hierarchy
+				column 'Maximum Temperature (K)'
+					displayFolder: 4. Product Facts
+				column 'Product Business Line Leader'
+					displayFolder: 3. Product Managers
+				column 'Tolerance (g)'
+					displayFolder: 4. Product Facts
+				column 'Velocity Tolerance (Meters / Second)'
+					displayFolder: 4. Product Facts
+				column 'Weight (Tonnes)'
+					displayFolder: 4. Product Facts
+				measure '# Products'
+					displayFolder: Measures
+				hierarchy 'Product Hierarchy'
+					displayFolder: 1. Product Hierarchy
+			table Regions
+				column System
+					displayFolder: 1. Region Hierarchy
+				column 'Interplanetary Region'
+					displayFolder: 1. Region Hierarchy
+				column Territory
+					displayFolder: 1. Region Hierarchy
+				column Station
+					displayFolder: 1. Region Hierarchy
+				column 'Station Type'
+					displayFolder: 2. Region Attributes
+				column 'Territory Directors'
+					displayFolder: 3. Managers
+				column All
+					displayFolder: 1. Region Hierarchy
+				column 'Station Sales Managers'
+					displayFolder: 3. Managers
+				column 'System Regional Managers'
+					displayFolder: 3. Managers
+				column 'System Sales Directors'
+					displayFolder: 3. Managers
+				hierarchy 'Regional Hierarchy'
+					displayFolder: 1. Region Hierarchy
+			table Budget
+				measure '2022 Budget Achievement %'
+					displayFolder: Measures\i. Total
+				measure 'Budget MTD'
+					displayFolder: Measures\ii. MTD
+				measure 'Budget MTD vs. Gross Sales (%)'
+					displayFolder: Measures\ii. MTD
+				measure 'Budget MTD vs. Gross Sales (Δ)'
+					displayFolder: Measures\ii. MTD
+				measure 'Budget QTD'
+					displayFolder: Measures\iii. QTD
+				measure 'Budget QTD vs. Gross Sales (%)'
+					displayFolder: Measures\iii. QTD
+				measure 'Budget QTD vs. Gross Sales (Δ)'
+					displayFolder: Measures\iii. QTD
+				measure 'Budget YTD'
+					displayFolder: Measures\iv. YTD
+				measure 'Budget YTD vs. Gross Sales (%)'
+					displayFolder: Measures\iv. YTD
+				measure 'Budget YTD vs. Gross Sales (Δ)'
+					displayFolder: Measures\iv. YTD
+				measure 'Total Budget'
+					displayFolder: Measures\i. Total
+				measure Budget
+					displayFolder: Measures\i. Total
+				measure 'Budget vs. Gross Sales (%)'
+					displayFolder: Measures\i. Total
+				measure 'Budget vs. Gross Sales (Δ)'
+					displayFolder: Measures\i. Total
+			table Date
+				column Date
+					displayFolder: 6. Calendar Date
+				column 'Calendar Year Number (ie 2021)'
+					displayFolder: 1. Year
+				column 'Calendar Year (ie 2021)'
+					displayFolder: 1. Year
+				column 'Calendar Quarter Year (ie Q1 2021)'
+					displayFolder: 2. Quarter
+				column 'Calendar Year Quarter (ie 202101)'
+					displayFolder: 2. Quarter
+				column 'Calendar Month Year (ie Jan 21)'
+					displayFolder: 3. Month
+				column 'Calendar Year Month (ie 202101)'
+					displayFolder: 3. Month
+				column 'Calendar Month (ie Jan)'
+					displayFolder: 3. Month
+				column 'Calendar Month # (ie 1)'
+					displayFolder: 3. Month
+				column 'Weekday Short (i.e. Mon)'
+					displayFolder: 5. Weekday / Workday\Weekday
+				column 'Weekday Name (i.e. Monday)'
+					displayFolder: 5. Weekday / Workday\Weekday
+				column 'Weekday Number EU (i.e. 1)'
+					displayFolder: 5. Weekday / Workday\Weekday
+				column 'Calendar Month Day (i.e. Jan 05)'
+					displayFolder: 3. Month
+				column 'Calendar Month Day (i.e. 0105)'
+					displayFolder: 3. Month
+				column 'Workdays MTD'
+					displayFolder: 5. Weekday / Workday\Workdays
+				column 'Workdays QTD'
+					displayFolder: 5. Weekday / Workday\Workdays
+				column 'Workdays YTD'
+					displayFolder: 5. Weekday / Workday\Workdays
+				column 'Workdays MTD %'
+					displayFolder: 5. Weekday / Workday\Workdays
+				column 'Calendar Quarter (ie Q1)'
+					displayFolder: 2. Quarter
+				measure '# Workdays MTD'
+					displayFolder: 5. Weekday / Workday\Measures\# Workdays
+				measure '# Workdays QTD'
+					displayFolder: 5. Weekday / Workday\Measures\# Workdays
+				measure '# Workdays YTD'
+					displayFolder: 5. Weekday / Workday\Measures\# Workdays
+				measure '# Workdays in Selected Month'
+					displayFolder: 5. Weekday / Workday\Measures\# Workdays
+				measure '# Workdays in Selected Quarter'
+					displayFolder: 5. Weekday / Workday\Measures\# Workdays
+				measure '# Workdays in Selected Year'
+					displayFolder: 5. Weekday / Workday\Measures\# Workdays
+				measure '% Workdays MTD'
+					displayFolder: 5. Weekday / Workday\Measures\# Workdays
+				measure '% Workdays QTD'
+					displayFolder: 5. Weekday / Workday\Measures\# Workdays
+				measure '% Workdays YTD'
+					displayFolder: 5. Weekday / Workday\Measures\# Workdays
+			table 'On-Time Delivery'
+				measure 'OTD % (Lines)'
+					displayFolder: 3. Lines
+				measure 'OTD % (Quantity)'
+					displayFolder: 2. Quantity
+				measure 'OTD % (Value)'
+					displayFolder: 1. Value
+				measure 'OTD (Lines)'
+					displayFolder: 3. Lines
+				measure 'OTD (Quantity)'
+					displayFolder: 2. Quantity
+				measure 'OTD (Value)'
+					displayFolder: 1. Value
+			table Orders
+				measure 'Net Orders'
+					displayFolder: 1. Value\i. Total
+				measure 'Net Orders (Quantity)'
+					displayFolder: 2. Quantity
+				measure 'Total Net Order Value'
+					displayFolder: 1. Value\i. Total
+				measure 'Order Lines'
+					displayFolder: 3. Lines
+			table Forecast
+				measure 'Forecast MTD'
+					displayFolder: Measures\ii. MTD
+				measure 'Forecast QTD'
+					displayFolder: Measures\iii. QTD
+				measure 'Forecast QTD vs. Gross Sales (%)'
+					displayFolder: Measures\iii. QTD
+				measure 'Forecast QTD vs. Gross Sales (Δ)'
+					displayFolder: Measures\iii. QTD
+				measure 'Forecast YTD'
+					displayFolder: Measures\iv. YTD
+				measure 'Forecast YTD vs. Gross Sales (%)'
+					displayFolder: Measures\iv. YTD
+				measure 'Forecast YTD vs. Gross Sales (Δ)'
+					displayFolder: Measures\iv. YTD
+				measure 'Total Forecast'
+					displayFolder: Measures\i. Total
+				measure Forecast
+					displayFolder: Measures\i. Total
+				measure 'Forecast MTD vs. Gross Sales (%)'
+					displayFolder: Measures\ii. MTD
+				measure 'Forecast MTD vs. Gross Sales (Δ)'
+					displayFolder: Measures\ii. MTD
+				measure 'Forecast vs. Gross Sales (%)'
+					displayFolder: Measures\i. Total
+				measure 'Forecast vs. Gross Sales (Δ)'
+					displayFolder: Measures\i. Total
+			table 'Order Document Type'
+				column Text
+					displayFolder: 1. Order Doc. Type
+				column Group
+					displayFolder: 1. Order Doc. Type
+			table 'Order Status'
+				column 'Order Status Text'
+					displayFolder: 1. Order Status
+				column 'Order Status Group'
+					displayFolder: 1. Order Status
+			table __Measures
+				measure Actuals
+					displayFolder: 1. Total\Actuals
+				measure 'Actuals MTD'
+					displayFolder: 2. MTD\Actuals
+				measure 'Actuals QTD'
+					displayFolder: 3. QTD\Actuals
+				measure 'Actuals YTD'
+					displayFolder: 4. YTD
+				measure 'Sales Target YTD vs. Gross Sales (%)'
+					displayFolder: 4. YTD
+				measure 'Sales Target YTD vs. Gross Sales (Δ)'
+					displayFolder: 4. YTD
+				measure 'Sales Target YTD'
+					displayFolder: 4. YTD
+				measure 'Sales Target QTD'
+					displayFolder: 3. QTD\Sales Target
+				measure 'Sales Target MTD'
+					displayFolder: 2. MTD\Sales Target
+				measure 'Sales Target'
+					displayFolder: 1. Total\Sales Target
+				measure 'Sales Target vs. Actuals (Δ)'
+					displayFolder: 1. Total\Sales Target
+				measure 'Sales Target vs. Actuals (%)'
+					displayFolder: 1. Total\Sales Target
+				measure 'Sales Target MTD vs. Actuals (Δ)'
+					displayFolder: 2. MTD\Sales Target
+				measure 'Sales Target MTD vs. Actuals (%)'
+					displayFolder: 2. MTD\Sales Target
+				measure 'Actuals MTD, Latest Data Point'
+					displayFolder: 9. Technical Measures
+				measure 'Actuals MTD, Data Label'
+					displayFolder: 9. Technical Measures
+				measure 'Orders Target'
+					displayFolder: 1. Total\Orders Target
+				measure 'Orders Target vs. Net Orders (%)'
+					displayFolder: 1. Total\Orders Target
+				measure 'Orders Target vs. Net Orders (Δ)'
+					displayFolder: 1. Total\Orders Target
+				measure 'Orders Target MTD'
+					displayFolder: 2. MTD\Orders Target
+				measure 'Orders Target QTD'
+					displayFolder: 3. QTD\Orders Target
+				measure 'Orders Target YTD'
+					displayFolder: 4. YTD
+			table '__Demo Measures'
+				measure Sales
+					displayFolder: Measures\Numbers
+				measure 'Sales Budget'
+					displayFolder: Measures\Numbers
+				measure 'Sales Forecast'
+					displayFolder: Measures\Numbers
+				measure 'Billing Document Lines'
+					displayFolder: Measures\Numbers
+				measure '# Accounts'
+					displayFolder: Measures\Numbers
+				measure 'No. Products'
+					displayFolder: Measures\Numbers
+			table Invoices
+				measure 'Delivery Margin (%)'
+					displayFolder: 1. Value\d. Margins\III. Delivery Margin\%
+				measure 'Delivery Margin 1YP (%)'
+					displayFolder: 1. Value\d. Margins\III. Delivery Margin\%
+				measure 'Delivery Margin 2YP (%)'
+					displayFolder: 1. Value\d. Margins\III. Delivery Margin\%
+				measure 'Delivery Margin (Value)'
+					displayFolder: 1. Value\d. Margins\III. Delivery Margin\$
+				measure 'Delivery Margin 1YP (Value)'
+					displayFolder: 1. Value\d. Margins\III. Delivery Margin\$
+				measure 'Delivery Margin 2YP (Value)'
+					displayFolder: 1. Value\d. Margins\III. Delivery Margin\$
+				measure 'Selling Margin (%)'
+					displayFolder: 1. Value\d. Margins\II. Selling Margin\%
+				measure 'Selling Margin 1YP (%)'
+					displayFolder: 1. Value\d. Margins\II. Selling Margin\%
+				measure 'Selling Margin 2YP (%)'
+					displayFolder: 1. Value\d. Margins\II. Selling Margin\%
+				measure 'Selling Margin (Value)'
+					displayFolder: 1. Value\d. Margins\II. Selling Margin\$
+				measure 'Selling Margin 1YP (Value)'
+					displayFolder: 1. Value\d. Margins\II. Selling Margin\$
+				measure 'Selling Margin 2YP (Value)'
+					displayFolder: 1. Value\d. Margins\II. Selling Margin\$
+				measure 'Standard Margin (%)'
+					displayFolder: 1. Value\d. Margins\I. Std. Margin\%
+				measure 'Standard Margin 1YP (%)'
+					displayFolder: 1. Value\d. Margins\I. Std. Margin\%
+				measure 'Standard Margin 2YP (%)'
+					displayFolder: 1. Value\d. Margins\I. Std. Margin\%
+				measure 'Standard Margin (Value)'
+					displayFolder: 1. Value\d. Margins\I. Std. Margin\$
+				measure 'Standard Margin 1YP (Value)'
+					displayFolder: 1. Value\d. Margins\I. Std. Margin\$
+				measure 'Standard Margin 2YP (Value)'
+					displayFolder: 1. Value\d. Margins\I. Std. Margin\$
+				measure 'Gross Sales'
+					displayFolder: 1. Value\a. Gross Sales Actuals\I. Total
+				measure 'MTD Gross Sales'
+					displayFolder: 1. Value\a. Gross Sales Actuals\I. Total
+				measure 'Gross Sales 1YP'
+					displayFolder: 1. Value\a. Gross Sales Actuals\II. 1YP\Daily
+				measure 'Gross Sales vs 1YP (%)'
+					displayFolder: 1. Value\a. Gross Sales Actuals\II. 1YP\Daily
+				measure 'Gross Sales vs 1YP (Δ)'
+					displayFolder: 1. Value\a. Gross Sales Actuals\II. 1YP\Daily
+				measure 'MTD Gross Sales 1YP'
+					displayFolder: 1. Value\a. Gross Sales Actuals\II. 1YP\MTD
+				measure 'MTD Gross Sales vs 1YP (%)'
+					displayFolder: 1. Value\a. Gross Sales Actuals\II. 1YP\MTD
+				measure 'MTD Gross Sales vs 1YP (Δ)'
+					displayFolder: 1. Value\a. Gross Sales Actuals\II. 1YP\MTD
+				measure 'Gross Sales 2YP'
+					displayFolder: 1. Value\a. Gross Sales Actuals\III. 2YP\Daily
+				measure 'Gross Sales vs 2YP (%)'
+					displayFolder: 1. Value\a. Gross Sales Actuals\III. 2YP\Daily
+				measure 'Gross Sales vs 2YP (Δ)'
+					displayFolder: 1. Value\a. Gross Sales Actuals\III. 2YP\Daily
+				measure 'MTD Gross Sales 2YP'
+					displayFolder: 1. Value\a. Gross Sales Actuals\III. 2YP\MTD
+				measure 'MTD Gross Sales vs 2YP (%)'
+					displayFolder: 1. Value\a. Gross Sales Actuals\III. 2YP\MTD
+				measure 'MTD Gross Sales vs. 2YP (Δ)'
+					displayFolder: 1. Value\a. Gross Sales Actuals\III. 2YP\MTD
+				measure 'Net Sales'
+					displayFolder: 1. Value\c. Net Sales
+				measure 'Net Sales 1YP'
+					displayFolder: 1. Value\c. Net Sales
+				measure 'Net Sales 2YP'
+					displayFolder: 1. Value\c. Net Sales
+				measure 'Invoice Lines'
+					displayFolder: 3. Lines
+				measure 'Gross Sales (Quantity)'
+					displayFolder: 2. Quantity\b. Gross Sales Actuals
+				measure 'Gross Sales 1YP (Quantity)'
+					displayFolder: 2. Quantity\b. Gross Sales Actuals
+				measure 'Total Net Invoice Quantity'
+					displayFolder: 2. Quantity\b. Gross Sales Actuals
+
+	linguisticMetadata =
+			{
+			  "Language": "en-US",
+			  "Version": "1.0.0"
+			}
+		contentType: json
+

@@ -1,0 +1,77 @@
+model SpaceParts
+	culture: en-US
+	collation: Latin1_General_100_BIN2_UTF8
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Parameters
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup 'Scalar Values'
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup Tables
+
+	annotation PBI_QueryGroupOrder = 2
+
+annotation TabularEditor_SerializeOptions = {"IgnoreInferredObjects":true,"IgnoreInferredProperties":true,"IgnoreTimestamps":true,"SplitMultilineStrings":true,"PrefixFilenames":false,"LocalTranslations":true,"LocalPerspectives":true,"LocalRelationships":true,"Levels":["Data Sources","Perspectives","Relationships","Roles","Shared Expressions","Tables","Tables/CalculationItems","Tables/Columns","Tables/Hierarchies","Tables/Measures","Tables/Partitions","Translations"]}
+
+annotation DataGoblins_SnekHighScore = 3
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Brands","Budget Rate","Customers","Employees","Exchange Rate","Invoice Document Type","Products","Regions","Budget","Orders","Forecast","Order Document Type","Order Status","SqlEndpoint","Database","RangeStart","RangeEnd","Last Refresh","Invoices"]
+
+annotation PBI_ProTooling = ["DaxQueryView_Desktop","TMDLView_Desktop"]
+
+annotation __TEdtr = 1
+
+annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["AVOID_FLOATING_POINT_DATA_TYPES","ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS","AVOID_BI-DIRECTIONAL_RELATIONSHIPS_AGAINST_HIGH-CARDINALITY_COLUMNS","REDUCE_USAGE_OF_LONG-LENGTH_COLUMNS_WITH_HIGH_CARDINALITY","SPLIT_DATE_AND_TIME","LARGE_TABLES_SHOULD_BE_PARTITIONED","REDUCE_USAGE_OF_CALCULATED_COLUMNS_THAT_USE_THE_RELATED_FUNCTION","SNOWFLAKE_SCHEMA_ARCHITECTURE","MODEL_SHOULD_HAVE_A_DATE_TABLE","DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE","REMOVE_AUTO-DATE_TABLE","AVOID_EXCESSIVE_BI-DIRECTIONAL_OR_MANY-TO-MANY_RELATIONSHIPS","LIMIT_ROW_LEVEL_SECURITY_(RLS)_LOGIC","MODEL_USING_DIRECT_QUERY_AND_NO_AGGREGATIONS","MINIMIZE_POWER_QUERY_TRANSFORMATIONS","AVOID_USING_MANY-TO-MANY_RELATIONSHIPS_ON_TABLES_USED_FOR_DYNAMIC_ROW_LEVEL_SECURITY","UNPIVOT_PIVOTED_(MONTH)_DATA","MANY-TO-MANY_RELATIONSHIPS_SHOULD_BE_SINGLE-DIRECTION","REDUCE_USAGE_OF_CALCULATED_TABLES","REMOVE_REDUNDANT_COLUMNS_IN_RELATED_TABLES","MEASURES_USING_TIME_INTELLIGENCE_AND_MODEL_IS_USING_DIRECT_QUERY","REDUCE_NUMBER_OF_CALCULATED_COLUMNS","CHECK_IF_BI-DIRECTIONAL_AND_MANY-TO-MANY_RELATIONSHIPS_ARE_VALID","CHECK_IF_DYNAMIC_ROW_LEVEL_SECURITY_(RLS)_IS_NECESSARY","DAX_COLUMNS_FULLY_QUALIFIED","DAX_MEASURES_UNQUALIFIED","AVOID_DUPLICATE_MEASURES","USE_THE_TREATAS_FUNCTION_INSTEAD_OF_INTERSECT","USE_THE_DIVIDE_FUNCTION_FOR_DIVISION","AVOID_USING_THE_IFERROR_FUNCTION","MEASURES_SHOULD_NOT_BE_DIRECT_REFERENCES_OF_OTHER_MEASURES","FILTER_COLUMN_VALUES","FILTER_MEASURE_VALUES_BY_COLUMNS","INACTIVE_RELATIONSHIPS_THAT_ARE_NEVER_ACTIVATED","AVOID_USING_'1-(X/Y)'_SYNTAX","EVALUATEANDLOG_SHOULD_NOT_BE_USED_IN_PRODUCTION_MODELS","DATA_COLUMNS_MUST_HAVE_A_SOURCE_COLUMN","EXPRESSION_RELIANT_OBJECTS_MUST_HAVE_AN_EXPRESSION","AVOID_STRUCTURED_DATA_SOURCES_WITH_PROVIDER_PARTITIONS","AVOID_THE_USERELATIONSHIP_FUNCTION_AND_RLS_AGAINST_THE_SAME_TABLE","RELATIONSHIP_COLUMNS_SAME_DATA_TYPE","AVOID_INVALID_NAME_CHARACTERS","AVOID_INVALID_DESCRIPTION_CHARACTERS","SET_ISAVAILABLEINMDX_TO_TRUE_ON_NECESSARY_COLUMNS","UNNECESSARY_COLUMNS","UNNECESSARY_MEASURES","FIX_REFERENTIAL_INTEGRITY_VIOLATIONS","REMOVE_DATA_SOURCES_NOT_REFERENCED_BY_ANY_PARTITIONS","REMOVE_ROLES_WITH_NO_MEMBERS","ENSURE_TABLES_HAVE_RELATIONSHIPS","OBJECTS_WITH_NO_DESCRIPTION","PERSPECTIVES_WITH_NO_OBJECTS","CALCULATION_GROUPS_WITH_NO_CALCULATION_ITEMS","PARTITION_NAME_SHOULD_MATCH_TABLE_NAME_FOR_SINGLE_PARTITION_TABLES","SPECIAL_CHARS_IN_OBJECT_NAMES","TRIM_OBJECT_NAMES","FORMAT_FLAG_COLUMNS_AS_YES/NO_VALUE_STRINGS","OBJECTS_SHOULD_NOT_START_OR_END_WITH_A_SPACE","DATECOLUMN_FORMATSTRING","MONTHCOLUMN_FORMATSTRING","PROVIDE_FORMAT_STRING_FOR_MEASURES","NUMERIC_COLUMN_SUMMARIZE_BY","PERCENTAGE_FORMATTING","INTEGER_FORMATTING","RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE","ADD_DATA_CATEGORY_FOR_COLUMNS","HIDE_FOREIGN_KEYS","MARK_PRIMARY_KEYS","HIDE_FACT_TABLE_COLUMNS","FIRST_LETTER_OF_OBJECTS_MUST_BE_CAPITALIZED","MONTH_(AS_A_STRING)_MUST_BE_SORTED"]}
+
+ref table Brands
+ref table 'Budget Rate'
+ref table Customers
+ref table Employees
+ref table 'Exchange Rate'
+ref table 'Invoice Document Type'
+ref table Products
+ref table Regions
+ref table Budget
+ref table Date
+ref table 'On-Time Delivery'
+ref table Orders
+ref table Forecast
+ref table 'Order Document Type'
+ref table 'Order Status'
+ref table '1) Selected Metric'
+ref table '2) Selected Unit'
+ref table '3) Selected Target'
+ref table '4) Selected Period'
+ref table 'Z01CG1 - Quantity'
+ref table 'Z01CG2 - Value (Budget Rate)'
+ref table 'Z01CG4 - Lines'
+ref table 'Z02CG1 - Unit'
+ref table 'Z03CG1 - Sales Target'
+ref table 'Z03CG2 - Orders Target'
+ref table 'Z04CG1 - Time Intelligence'
+ref table __Measures
+ref table '__Demo Measures'
+ref table DateTableTemplate_ff17ea92-fce8-4bb9-9469-a432491a20d5
+ref table LocalDateTable_fca581ec-8430-42e1-9f91-795770007388
+ref table LocalDateTable_4ad7e833-9e3a-4bd3-9873-535c2d4d4285
+ref table LocalDateTable_579bd8be-fc8b-4a18-a637-ab748ff358e0
+ref table 'Last Refresh'
+ref table LocalDateTable_595bdce4-ba17-4e98-90af-2d00b0a66670
+ref table Invoices
+ref table LocalDateTable_6b2c9e31-0c64-4034-8869-3404e703fc01
+
+ref perspective 'No Measure Selection'
+
+ref cultureInfo en-US
+
