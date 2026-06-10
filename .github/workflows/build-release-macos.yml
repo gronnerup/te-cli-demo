@@ -1,0 +1,142 @@
+# Tabular Editor CLI — Build & Release (macOS)
+#
+# One of three single-OS release workflows (linux / windows / macos), kept SEPARATE so
+# each gets its own run + duration in the Actions tab for timing/benchmark comparison
+# across build agents — the same idea as the split PR-validation workflows.
+#
+# Trigger: push to a release branch for THIS agent, e.g. releases-mac/release-1.0
+#          (or use the "Run workflow" button — workflow_dispatch).
+#
+# Flow:
+#   deploy_test (env: Test)        deploy SpaceParts.SemanticModel to [tst] -> refresh -> .te-tests/
+#   deploy_prod (env: Production)  after tests pass; Production reviewers gate the deploy to [prd]
+#
+# The shared "te-release-deploy" concurrency group ensures only one release run (across
+# all three OS workflows) deploys at a time — they share one dataset/workspace.
+#
+# macos-latest is Apple Silicon/arm64 — uses the arm64 te build. Switch runs-on to
+# macos-13 for an Intel x64 runner (and commit an x64 te to match).
+#
+# Secrets: AZURE_CLIENT_ID / AZURE_CLIENT_SECRET / AZURE_TENANT_ID (repo or environment).
+# te binary committed gzip'd under tools/te/macos/ and unpacked at runtime.
+
+name: Build & Release (macOS)
+
+on:
+  push:
+    branches:
+      - "releases-mac/release*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: te-release-deploy          # shared across all three release workflows
+  cancel-in-progress: false         # queue, don't cancel — never deploy concurrently
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  MODEL_PATH: SpaceParts.SemanticModel
+  DATASET_NAME: SpaceParts
+  TEST_WORKSPACE: "TE CLI [tst]"
+  PROD_WORKSPACE: "TE CLI [prd]"
+  TE_ARCHIVE: ./tools/te/macos/te.gz
+  TE_BINARY: ./tools/te/macos/te
+
+jobs:
+  deploy_test:
+    name: "[tst] deploy + test (macos-latest)"
+    runs-on: macos-latest
+    environment: Test
+    env:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Unpack te binary
+        run: |
+          set -euo pipefail
+          gunzip -c "$TE_ARCHIVE" > "$TE_BINARY"
+          chmod +x "$TE_BINARY"
+          "$TE_BINARY" --version
+
+      - name: Deploy to [tst]
+        run: |
+          set -euo pipefail
+          "$TE_BINARY" deploy "$MODEL_PATH" \
+            -s "$TEST_WORKSPACE" \
+            -d "$DATASET_NAME" \
+            --auth env \
+            --force \
+            --ci github \
+            --non-interactive
+
+      - name: Refresh model on [tst]
+        run: |
+          set -euo pipefail
+          "$TE_BINARY" refresh \
+            -s "$TEST_WORKSPACE" \
+            -d "$DATASET_NAME" \
+            --auth env \
+            --table Brands \
+            --type full \
+            --no-progress \
+            --non-interactive
+
+      - name: Run test suite
+        run: |
+          set -euo pipefail
+          "$TE_BINARY" test run \
+            -s "$TEST_WORKSPACE" \
+            -d "$DATASET_NAME" \
+            --auth env \
+            --fail-on error \
+            --ci github \
+            --trx test-results.trx \
+            --non-interactive
+
+      - name: Upload TRX artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-macos
+          path: test-results.trx
+          if-no-files-found: ignore
+
+  deploy_prod:
+    name: "[prd] deploy (macos-latest)"
+    needs: deploy_test
+    runs-on: macos-latest
+    environment: Production
+    env:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Unpack te binary
+        run: |
+          set -euo pipefail
+          gunzip -c "$TE_ARCHIVE" > "$TE_BINARY"
+          chmod +x "$TE_BINARY"
+          "$TE_BINARY" --version
+
+      - name: Deploy to [prd]
+        run: |
+          set -euo pipefail
+          "$TE_BINARY" deploy "$MODEL_PATH" \
+            -s "$PROD_WORKSPACE" \
+            -d "$DATASET_NAME" \
+            --auth env \
+            --force \
+            --ci github \
+            --non-interactive
